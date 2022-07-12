@@ -1,29 +1,52 @@
 #include "main.h"
+#include <limits.h>
 
 /**
- * _strcpy - copy a string (including the terminating null-byte)
+ * _atoi - convert a string to an integer
+ * @s: the string to convert
  *
- * @dest: the buffer to which the string should be copied
- * @src: the string to copy
- *
- * Return: dest
+ * Return: result of conversion
  */
-char *_strcpy(char *dest, char *src)
+int _atoi(char *s)
 {
-	int len = 0;
-	int pos = 0;
+	unsigned int n = 0;
+	int sign = 1;
+	int flag = 0;
 
-	if (dest && src)
+	while (*s)
 	{
-		while (*(src + len))
-			++len;
-
-		if (src + len < dest || dest + len < src)
+		if (*s >= '0' && *s <= '9')
 		{
-			do {
-				*(dest + pos++) = *src++;
-			} while (len--);
+			flag = 1;
+			if (sign > 0)
+			{
+				if (INT_MAX / 10 < (int) n)
+					return (INT_MAX);
+				n *= 10;
+				if (INT_MAX - (*s - '0') < (int) n)
+					return (INT_MAX);
+			}
+			else
+			{
+				if (INT_MIN / 10 > (int) -n)
+					return (INT_MIN);
+				n *= 10;
+				if (INT_MIN + (*s - '0') > (int) -n)
+					return (INT_MIN);
+			}
+			n += (*s - '0');
 		}
+		else if (flag)
+		{
+			break;
+		}
+		else if (*s == '-')
+		{
+			sign *= -1;
+		}
+		++s;
+
 	}
-	return (dest);
+	return (n *sign);
+
 }
